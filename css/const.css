@@ -1,0 +1,2596 @@
+/* Variables globales - Configuration des couleurs et dimensions principales */
+:root {
+    /* Configuration des traits et bordures */
+    --couleur-trait-poule: #000;        /* Couleur des bordures des poules */
+    --epaisseur-poule: 2px;             /* Épaisseur des bordures des poules */
+    --epaisseur: 1.7px;                 /* Épaisseur générale des traits */
+    --couleur-trait: #000;              /* Couleur générale des traits */
+    --epaisseur-fin: 0;                 /* Épaisseur des traits fins */
+    --couleur-trait-fin: #000;          /* Couleur des traits fins */
+
+    /* Configuration des tableaux et cases */
+    --tableau-height: 0;                 /* Hauteur de base des tableaux */
+    --couleur-case: #FAF9E5;            /* Couleur de fond des cases */
+    --couleur-case-titre: #FBFAEA;      /* Couleur de fond des titres */
+    --couleur-case-doc: #FBFAEA;        /* Couleur de fond des documents */
+    
+    /* Configuration des scores et textes */
+    --couleur-score: #286E7C;           /* Couleur des scores */
+    --font-size-score: 15px;            /* Taille de police des scores */
+    --font-size-arbitre: 13px;          /* Taille de police des arbitres */
+    
+    /* Configuration des titres */
+    --couleur-titre: #CD0034;           /* Couleur des titres principaux */
+    --couleur-titre-comp: #273973;      /* Couleur des titres de compétition */
+    
+    /* Configuration des layouts */
+    --fixed-head-height-margin: 1.7em;   /* Marge des en-têtes fixes */
+    --shift_finalist: 10px;              /* Décalage pour les finalistes */
+    --banner-bg-color: linear-gradient(135deg, #050c13 20%, #161718 100%); /* Fond bannière par défaut */
+
+    /* Configuration pour la barre de recherche */
+    --search-bar-height: 50px;
+    --search-bar-background: rgba(3, 44, 85, 0.95);
+    --search-bar-text-color: #ffffff;
+    --search-highlight-color: #e74c3c;
+    --search-highlight-background: #fef9f9;
+    --search-button-color: #074f58;
+    --search-button-hover-color: #0a6c79;
+}
+
+/* Reset et styles de base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #031738 100%);
+    margin-top: 60px;
+    min-height: 100vh;
+    color: #000;
+}
+
+/* Layout Components */
+.content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    /* Ajuster le padding-top pour tenir compte des deux barres fixes */
+    padding-top: 70px; /* 60px (toolbar) + 50px (competition-info) + 20px (espace) */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 54px; /* Ajuster en fonction de la hauteur de la barre de recherche */
+    position: relative;
+    z-index: 1;
+}
+
+/* Toolbar Components */
+.toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #032c55;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1001; /* Augmenter pour être sûr qu'elle reste au-dessus */
+    height: 60px; /* Hauteur fixe pour la barre d'outils */
+    overflow-x: auto; /* Permettre le défilement horizontal si nécessaire */
+    -webkit-overflow-scrolling: touch;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Toolbar Components - Version optimisée */
+.toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%; /* Assure que la toolbar prend 100% de la largeur */
+    background-color: #032c55;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1002; /* Augmenté pour être sûr qu'elle reste au-dessus */
+    height: 60px; /* Hauteur fixe standard pour la barre d'outils */
+    overflow-x: auto; /* Permettre le défilement horizontal si nécessaire */
+    -webkit-overflow-scrolling: touch;
+    justify-content: center;
+    flex-wrap: wrap;
+    box-sizing: border-box; /* Inclut padding dans la largeur totale */
+}
+
+.toolbar-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background-color: #074f58;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    font-size: 14px;
+    min-width: 100px;
+}
+
+.toolbar-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.toolbar-button.home {
+    background-color: #e74c3c;
+}
+
+.toolbar-button.active {
+    background-color: #27ae60;
+    pointer-events: none;
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.font-bold { font-weight: bold; }
+.font-normal { font-weight: normal; }
+
+/* Table Components */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+/* Poule Components */
+.poule {
+    display: inline-block;
+    margin: calc(10px * var(--rescale));
+    background: var(--couleur-case);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .toolbar {
+        padding: 5px;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+        height: auto;
+        min-height: 60px;
+    }
+
+    .toolbar-button {
+        min-width: auto;
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .content-wrapper {
+        padding: 70px 10px 20px;
+        margin-top: 0;
+        padding-top: 10px;
+    }
+
+    .competition-info {
+        top: auto; /* Annuler la position fixed sur mobile */
+        position: sticky; /* Utiliser sticky au lieu de fixed */
+        margin-top: 60px;
+    }
+
+    .competition-info-content {
+        padding: 5px 0;
+        gap: 15px;
+    }
+
+    .info-item {
+        font-size: 12px;
+        padding: 4px 8px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .toolbar-button span {
+        display: none;
+    }
+
+    .toolbar-button {
+        padding: 8px;
+    }
+
+    .toolbar-button i {
+        font-size: 20px;
+        margin: 0;
+    }
+}
+
+/* Spécifiquement pour les écrans en mode paysage */
+@media (max-width: 896px) and (orientation: landscape) {
+    .toolbar {
+        height: auto;
+        max-height: 45px; /* Hauteur réduite en paysage */
+        padding: 3px 5px;
+        flex-wrap: nowrap; /* Éviter le retour à la ligne */
+        justify-content: flex-start; /* Aligner à gauche */
+        overflow-x: auto; /* Permettre le défilement horizontal */
+    }
+    
+    .toolbar-button {
+        min-width: auto;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: normal;
+        flex: 0 0 auto; /* Empêcher le rétrécissement */
+    }
+    
+    .toolbar-button i {
+        font-size: 14px;
+    }
+    
+    .competition-info {
+        top: 45px; /* Ajuster à la nouvelle hauteur de toolbar */
+        padding: 2px 10px; /* Padding réduit */
+        min-height: 30px; /* Hauteur minimale réduite */
+    }
+    
+    .competition-info-content {
+        padding: 2px 0; /* Padding vertical réduit */
+    }
+    
+    .content-wrapper {
+        margin-top: 75px; /* Ajuster à la somme des hauteurs des barres */
+        padding-top: 5px;
+    }
+    
+    /* Ajustements pour la barre de recherche et le bouton refresh */
+    .search-bar-container {
+        padding: 2px 6px;
+        height: auto;
+    }
+    
+    .search-bar, .search-controls {
+        height: 28px;
+    }
+    
+    .refresh-button {
+        height: 28px;
+        width: 32px;
+    }
+    
+    #competitor-search, #search-button, .nav-button {
+        height: 28px;
+    }
+}
+
+/* Optimisations pour les grands téléphones en mode paysage */
+@media (min-width: 667px) and (max-width: 896px) and (orientation: landscape) {
+    .toolbar-button {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+    
+    .toolbar {
+        max-height: 45px;
+    }
+}
+
+/* Optimisations pour les tablettes en mode paysage */
+@media (min-width: 897px) and (max-width: 1024px) and (orientation: landscape) {
+    .toolbar {
+        height: 50px;
+        padding: 5px 15px;
+    }
+    
+    .toolbar-button {
+        padding: 7px 12px;
+        font-size: 14px;
+    }
+    
+    .competition-info {
+        top: 50px;
+    }
+    
+    .content-wrapper {
+        margin-top: 100px;
+    }
+}
+
+/* Ajustements pour la barre de recherche en mode paysage */
+@media (max-width: 896px) and (orientation: landscape) {
+    .search-bar-container {
+        padding: 2px 6px;
+        height: auto;
+    }
+    
+    .search-bar {
+        max-width: 500px;
+        height: 28px;
+    }
+    
+    #competitor-search, #search-button, .nav-button {
+        height: 28px;
+    }
+    
+    #search-button, .nav-button {
+        width: 32px;
+    }
+    
+    #search-results {
+        margin-top: 0;
+        font-size: 10px;
+        height: 14px;
+    }
+    
+    /* Adapter le contenu pour laisser de la place pour la barre de recherche */
+    .content-wrapper {
+        padding-bottom: 46px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .toolbar {
+        display: none;
+    }
+    
+    body {
+        margin: 0;
+        background: none;
+    }
+    
+    .content-wrapper {
+        padding: 0;
+    }
+}
+
+/* Styles existants */
+.home
+{
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+    font-weight: bold;
+    font-size : 4vw;
+}
+.zoom
+{
+    width:  80vw;
+    height: 5vw;    
+}
+
+.buttonicon_dis,
+.buttonicon
+{
+    padding:0px;
+    width:  8vw;
+    height: 8vw;
+    border-radius: 0.7vw;
+    font-size : 6vw;
+    vertical-align: middle;
+    margin:0.5vw;
+}
+
+.buttonicon_dis
+{
+    color:#AAA;
+}
+.buttoniconi_dis
+{
+    background:#00917B;
+}
+
+
+.autohide
+{
+    visibility: hidden;
+    border-radius: 1vw;
+    padding : 1vw;
+    border : solid 0.5vw #00917B;
+    background: #42FEDC;
+    position:absolute;
+    top:15vw;
+    left:4      vw;
+    right-margin:6vw;
+    z-index: 10;
+    /* background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12); */
+}
+
+
+/***********************
+   CLASSEMENT COMBINE
+ ***********************/
+.tblhd_multicol
+{
+    margin-left:0.3vw;
+    margin-right:0.6vw;
+    display: inline-block;
+    position: relative;
+    border: 2px solid black;
+    background:#CCC;
+    padding: calc(15px * var(--rescale));
+    font-size: calc(13px * var(--rescale));
+font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+/* font-weight: bold; */
+}
+
+.tblhdpou
+{
+    display: inline-block;
+    position: relative;
+    font-size:calc(12px * var(--rescale) );
+}
+
+.tblhd
+{
+    display: inline-block;
+    position: relative;
+    font-size:calc(12px * var(--rescale) );
+}
+.tblhd_tab
+{
+    display: inline-block;
+    position: relative;
+    font-size:calc(12px * var(--rescale) );
+}
+
+.tbl_banner
+{
+    height:4vh;
+    font-size : 3vh;
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+}
+
+.tblhdpou > div
+{
+/*    height: calc(22px * var(--rescale)); */
+    background:#CCC;
+/*    height: calc( var(--fixed-head-height-margin) + 1em ); */
+/*    padding-top: calc( 5px * var(--rescale)); */
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+    font-weight: bold; 
+    text-align: center;
+}
+
+.tblhd > div
+{
+    height: calc(22px * var(--rescale));
+    background:#CCC;
+/*    height: calc( var(--fixed-head-height-margin) + 1em ); */
+/*    padding-top: calc( 5px * var(--rescale)); */
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+    font-weight: bold; 
+    text-align: center;
+}
+.tblhd_tab > div
+{
+    height: calc(12px + 48px * var(--rescale));
+    background:#CCC;
+/*    height: calc( var(--fixed-head-height-margin) + 1em ); */
+/*    padding-top: calc( 5px * var(--rescale)); */
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+    font-weight: bold; 
+    text-align: center;
+}
+
+.tblhead
+{
+    font-weight: bold; 
+    position: absolute;
+    top:0.3em;
+    font-family: "Arial Narrow", Arial, sans-serif;
+    margin-left:  calc(-10px * var(--rescale));
+    padding-left: calc(  3px * var(--rescale));
+    font-size:calc(10px * var(--rescale) );
+/*    border-left : 0.5px solid black; */
+/*    background:red; */
+}
+
+
+.tblhead_tab
+{
+    font-weight: bold; 
+    position: absolute;
+    top:0.3em;
+    font-family: "Arial Black", Arial, sans-serif;  
+/*    background:cyan; */
+        font-size : calc(6px  + 28px * var(--rescale));
+}
+
+div.listePoules
+{
+        background:none;
+}
+table.listeTireur td,
+table.listeTireur th
+{
+    padding-left:calc(8px * var(--rescale));
+    padding-right:calc(8px * var(--rescale));
+}
+
+table.listeTireur th
+{
+    font-weight: normal;
+}
+
+.VR
+{
+    border-right: 0.5px solid black;
+}
+
+table.listeTireur td.B
+{
+    font-weight : bold;
+    font-family: "Arial ", Arial, sans-serif;
+}
+
+table.listeTireur tr.impairQ td
+{
+	background-color : #BBFFBB;
+}
+
+table.listeTireur tr.pairQ td
+{
+	background-color : #DDFFDD;
+}
+
+table.listeTireur tr.impairOL td,
+table.listeTireur tr.impairO td
+{
+	background-color : #FFBBBB;
+}
+
+table.listeTireur tr.pairOL td,
+table.listeTireur tr.pairO td
+{
+	background-color : #FFDDDD;
+}
+
+table.listeTireur tr.impairQL td
+{
+	background-color : #EEE;
+}
+table.listeTireur tr.pairQL td
+{
+	background-color : #BBB;
+}
+
+table.listeTireur tr.impairQC td
+{
+	background-color :  #BBFFBB;;
+}
+table.listeTireur tr.pairQC td
+{
+	background-color : #DDFFDD;
+}
+
+table.listeTireur tr.impairOC td
+{
+	background-color :  #EEE;
+}
+table.listeTireur tr.pairOC td
+{
+	background-color : #BBB;
+}
+
+
+table.listeTireur tr.pairE td,
+table.listeTireur tr.impairE td
+{
+	background-color : #888888;
+}
+
+table.listeTireur th.MID,
+table.listeTireur td.MID 
+{
+    text-align:center;
+}
+
+.fh
+{
+    height: calc(94vh - var(--fixed-head-height-margin));
+    display: block;
+    overflow-y: auto;
+}
+
+.fhtab
+{
+    height: calc(90vh - var(--fixed-head-height-margin));
+    display: block;
+    overflow-y: auto;
+}
+
+.fhpou
+{
+    height: calc(94vh - var(--fixed-head-height-margin));
+    overflow-y: auto;
+}
+
+
+table.listeTireur td.RIG 
+{
+    text-align:right;
+}
+table.listeTireur td.LEF 
+{
+    text-align:left;
+}
+table.listeTireur tr
+{
+    page-break-inside:avoid !important;    
+}
+table.listeTireur 
+{
+    font-family: "Arial Narrow", Arial, sans-serif;
+     border-collapse: collapse;
+}
+
+@media screen
+{
+    table.listeTireur 
+    {
+     height: calc(94vh - var(--fixed-head-height-margin));  
+    }
+}
+
+
+
+h1 {
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+    font-size: 15px; 
+    font-weight: bold; 
+    text-align: center;
+    color:var(--couleur-titre);
+}
+h2 {
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif; 
+    font-size: 12px; 
+    font-weight: bold; 
+    color:var(--couleur-titre-comp);
+}
+
+/*
+    UTILISE
+*/
+
+.lespoules
+{
+}
+.poule_div
+{
+    padding-top:calc(10px * var(--rescale));
+    display: inline-block;
+    position: relative;
+    margin-right:calc(1vw * var(--rescale));
+}
+.poule_tab
+{
+    font-family: "Arial Narrow", Arial, sans-serif;
+        box-shadow: 3px 3px 3px #CCC;
+}
+
+.poule_res
+{
+    background: var(--couleur-case-titre);
+    padding-left : 5px;
+    padding-right : 5px;
+    font-size:calc(14px * var(--rescale));
+}
+.poule_arb 
+{
+    font-family: "Arial", Arial, sans-serif;
+    font-size:calc(14px * var(--rescale));
+    font-weight:normal;
+}
+.poule_doc
+{
+    font-family: "Arial Black", Arial, sans-serif;
+    background:var(--couleur-case-doc);
+    font-size:calc(20px * var(--rescale));
+    font-weight:bold;
+    padding:2px;
+    padding-right:5px;
+    padding-left:5px;
+    border-top:     calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-bottom:  calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-right:    calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-left:    calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+}
+
+.poule_not,
+.poule_tit
+{
+ background:var(--couleur-case-titre);
+    border-top:     calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-right:    calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);    
+}
+.poule_nom,
+.poule_sco,
+.poule_nor,
+.poule_not,
+.poule_dia
+{
+/*    height:30px; */
+    font-size:calc(20px * var(--rescale));
+}
+
+.poule_nom
+{
+    background:var(--couleur-case);
+    font-weight:bold;
+    /* padding:5px; */
+    padding-right:calc(3px * var(--rescale));
+    padding-left:calc(3px * var(--rescale));
+    /* width:310px; */
+    padding-top:0px;
+    padding-bottom:0px;
+    /* 6px; */
+    border-left:    calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+}
+
+.poule_tit
+{
+    font-size:calc(16px * var(--rescale));
+    text-align:center;
+    font-weight:bold;
+    vertical-align: bottom;
+}
+
+.poule_not,
+.poule_nor
+{
+    font-size:calc(12px * var(--rescale));
+}
+
+.poule_nor
+{
+    background:var(--couleur-case); 
+    padding-right:5px;
+}
+
+
+.poule_nom,
+.poule_sco,
+.poule_nor,
+.poule_res,
+.poule_dia
+{
+    border-top:     calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-bottom:  calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+}
+
+.poule_not
+{
+    vertical-align: bottom;
+    text-align:center;
+}
+
+.poule_tit,
+.poule_sco,
+.poule_dia
+{
+    width:calc(20px * var(--rescale));
+}
+
+
+.poule_res,
+.poule_sco,
+.poule_dia
+{
+    border-top:     calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-bottom:  calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-right:   calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    border-left:    calc(var(--epaisseur-poule) * var(--rescale)) solid var(--couleur-trait-poule);
+    text-align:center;
+}
+
+.poule_dia
+{
+    -webkit-print-color-adjust: exact;
+    background : #666;
+}
+
+.poule_sco
+{
+    background : var(--couleur-case);
+}
+
+
+.myTableau
+{
+    border-collapse: collapse; /* Correction de collapse; /* collapse; */
+    font-family: "Arial", Arial, sans-serif;
+    padding:0;
+    margin:0;
+}
+ 
+
+.myTableau td
+{
+        padding-top:0;
+        padding-bottom:0; 
+}
+.Tableau_net,
+.Tableau_neb,
+.Tableau_wet,
+.Tableau_web
+{
+/* margin-top:3px; */
+ height: 2px;
+}
+
+/*.Tableau_TXX
+{
+    font-size:calc(15px * var(--rescale));
+    font-family: "Arial", Arial, sans-serif;
+}*/
+
+.Tableau_neb_flip,
+.Tableau_neb
+{
+    min-width: calc(10px * var(--rescale));
+    /* background : #FFA; */
+}
+
+.Tableau_net,
+.Tableau_net_flip
+{
+     min-width: calc(10px * var(--rescale));
+    /* background : #FAF; */
+}
+
+.Tableau_nem
+{
+    /* background : #AFF; */
+}
+
+
+.Tableau_nrt
+{
+    /* background : #A00; */
+    border-top: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_nrt_flip
+{
+    /* background : #A00; */
+    border-top: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_nrb
+{
+    /* background : #0A0; */
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_nrb_flip
+{
+    /* background : #0A0; */
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_nvb
+{
+    border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+.Tableau_nvb_flip
+{
+    border-left:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_nvt
+{
+    border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_nvt_flip
+{
+    border-left:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_wto_lef
+{
+    background: var(--couleur-case);
+    /* background : #CDF; */
+    border-top: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right: var(--epaisseur-fin) solid var(--couleur-trait-fin);
+    border-left: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+.Tableau_wto_final,
+.Tableau_wto_lef_final
+{
+    transform: translate(calc(var(--shift_finalist) * var(--rescale)));
+    background: var(--couleur-case);
+        background : #CDF;
+        text-align:center;
+/*    border-top:    calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left:   calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait); */
+}
+
+.Tableau_wto_lef_flip
+{
+    text-align: right;
+    background: var(--couleur-case);
+    /* background : #CDF; */
+    border-top: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left: var(--epaisseur-fin) solid var(--couleur-trait-fin);
+}
+
+.Tableau_wto
+{
+    min-width: calc(20px * var(--rescale)); /* Correction de calc (20px * var(--rescale)) */
+    background: var(--couleur-case);
+    border-top: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_wto_flip
+{
+    min-width: calc(20px * var(--rescale)); /* Correction de calc (20px * var(--rescale)) */
+    background: var(--couleur-case);
+    border-top: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.avec_rang
+{
+   /* width:380px; */
+}
+.sans_rang
+{
+ /*   width:320px; */
+}   
+
+.gros,
+.gros20,
+.gros30,
+.gros40
+{
+    
+    font-family: "Arial Black", Arial, sans-serif;
+        font-weight:bold;
+}
+
+.gros_nobold
+{
+    font-family: "Arial Narrow", Arial, sans-serif;
+     /*   font-weight:bold; */
+}
+.gros
+{
+    font-size:calc(4px + 16px * var(--rescale));
+}
+.gros20
+{
+    font-size:calc(4px + 16px * var(--rescale)); /* 13 */
+}
+
+.gros30
+{
+    font-size:calc(3px + 14px * var(--rescale)); /* 12 */
+}
+.gros40
+{
+    font-size:calc(3px + 13px * var(--rescale)); /* 11 */
+}
+
+.score
+{
+    font-family: "Arial Black", Arial, sans-serif;
+    font-weight:bold;
+    color : var(--couleur-score);
+    font-size:calc(4px + var(--font-size-score) * var(--rescale));
+    text-align:center;
+}
+
+.date,
+.piste
+{
+     font-family: "Arial Black", Arial, sans-serif;
+    font-weight:bold;   color : var(--couleur-score);
+    font-size:calc(4px + var(--font-size-score) * var(--rescale));
+    text-align:center;
+}
+
+.Tableau_wmi_lef
+{
+    min-width : calc(100px * var(--rescale));
+    font-size:calc(var(--font-size-arbitre) * var(--rescale));
+    color : var(--couleur-score);
+    text-align:right;
+    background: var(--couleur-case);
+    border-right: var(--epaisseur-fin) solid var(--couleur-trait-fin);
+    border-left: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+.Tableau_wmi_lef_flip
+{
+    font-size:calc(var(--font-size-arbitre) * var(--rescale));
+    color : var(--couleur-score);
+    text-align:left;
+    background: var(--couleur-case);
+    border-right: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left: var(--epaisseur-fin) solid var(--couleur-trait-fin);
+}
+
+.Tableau_wmi
+{
+    text-align:center;
+    background: var(--couleur-case);
+    border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+.Tableau_wmi_flip
+{
+    text-align:center;
+    background: var(--couleur-case);
+    border-left:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+
+.Tableau_wbo_lef
+{
+    background: var(--couleur-case);
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right: var(--epaisseur-fin) solid var(--couleur-trait-fin);
+    border-left: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_wbo_lef_flip
+{
+    text-align:right;
+    background: var(--couleur-case);
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left: var(--epaisseur-fin) solid var(--couleur-trait-fin);
+}
+.Tableau_wbo_flip_final,
+.Tableau_wbo_lef_flip_final
+{
+    transform: translate(calc(-1*var(--shift_finalist) * var(--rescale)));
+    text-align: center;
+    background: var(--couleur-case);
+    background: #CDF; /* Correction de la syntaxe du point-virgule */
+    border: none;
+    /* Commentaires correctement formatés pour les styles en commentaire
+    border-top: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    */
+}
+
+.Tableau_wbo
+{
+    background: var(--couleur-case);
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_wbo_flip
+{
+    text-align:right;
+    background: var(--couleur-case);
+    border-bottom: calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    border-left:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+}
+
+.Tableau_nul
+    {
+	border-right:  calc(var(--epaisseur) * var(--rescale)) solid var(--couleur-trait);
+    }
+
+    .Tableau_sep{
+        min-width:  calc( 10px *  var(--rescale));
+    }
+    
+    .Tableau_wbo_lef,
+    .Tableau_wmi_lef,
+    .Tableau_wto_lef
+    {
+
+           padding-left:calc(2px * var(--rescale));
+    }
+
+    .slider-zoom
+    {
+        margin-top:5vh;
+        margin-left:5vh;
+        margin-right:5vh;
+    }
+    .slider-tableau
+    {
+        margin-top:5vh;
+        margin-left:5vh;
+        margin-right:5vh;
+        margin-bottom:8vh;
+    }
+
+/* Nouvelle barre d'outils */
+.toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2c3e50;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1001; /* Augmenter pour être sûr qu'elle reste au-dessus */
+    height: 60px; /* Hauteur fixe pour la barre d'outils */
+}
+
+.toolbar-button {
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.toolbar-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.toolbar-button.home {
+    background-color: #e74c3c;
+}
+
+.toolbar-button.home:hover {
+    background-color: #c0392b;
+}
+
+.toolbar-button.active {
+    background-color: #27ae60;
+    pointer-events: none;
+}
+
+/* Ajustement du contenu pour la barre fixe */
+.content-wrapper {
+    padding: 80px 20px 20px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 110px; /* Total des hauteurs des deux barres */
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Barre d'outils améliorée */
+.toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2c3e50;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1001; /* Augmenter pour être sûr qu'elle reste au-dessus */
+    height: 60px; /* Hauteur fixe pour la barre d'outils */
+}
+
+.toolbar-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    min-width: 100px;
+}
+
+.toolbar-button i {
+    font-size: 16px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .toolbar {
+        padding: 5px;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+        height: auto;
+        min-height: 60px;
+    }
+
+    .toolbar-button {
+        min-width: auto;
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .content-wrapper {
+        padding: 70px 10px 20px 10px;
+        margin-top: 0;
+        padding-top: 10px;
+    }
+
+    .competition-info {
+        top: auto; /* Annuler la position fixed sur mobile */
+        position: sticky; /* Utiliser sticky au lieu de fixed */
+        margin-top: 60px;
+    }
+
+    .competition-info-content {
+        padding: 5px 0;
+        gap: 15px;
+    }
+
+    .info-item {
+        font-size: 12px;
+        padding: 4px 8px;
+        white-space: nowrap;
+    }
+}
+
+/* Styles pour les onglets des tableaux */
+.tableaux-tabs {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.tableau-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #e9ecef;
+    color: #495057;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.tableau-tab:hover {
+    background: #dee2e6;
+    transform: translateY(-2px);
+}
+
+.tableau-tab.active {
+    background: #074f58;
+    color: white;
+}
+
+.tableau-tab i {
+    font-size: 14px;
+}
+
+/* Responsive design pour les onglets */
+@media (max-width: 768px) {
+    .tableaux-tabs {
+        padding: 5px;
+    }
+    
+    .tableau-tab {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+
+/* Styles pour les informations de la compétition */
+.competition-info {
+    position: fixed; /* Reste toujours fixe */
+    top: 60px; /* Se positionne sous la toolbar */
+    left: 0;
+    right: 0;
+    background: #032c55;
+    padding: 12px 20px;
+    border-bottom: 2px solid #074f58;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    min-height: 50px;
+    height: auto;
+    color: #fff;
+    overflow: hidden; /* Assure que le contenu ne déborde pas */
+}
+
+.competition-info-content {
+    display: flex;
+    flex-wrap: nowrap; /* Empêche le retour à la ligne */
+    gap: 15px;
+    justify-content: flex-start; /* Aligne à gauche */
+    align-items: center;
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 10px 0; /* Ajout d'un peu de padding vertical */
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+    animation: scrollText 20s linear infinite;
+    animation-play-state: paused; /* L'animation est en pause par défaut */
+}
+
+/* Animation de défilement */
+@keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 20px)); } /* -20px pour le gap */
+}
+
+/* Quand le contenu dépasse, active l'animation */
+.competition-info-content:hover {
+    animation-play-state: running;
+}
+
+/* Double le contenu quand il dépasse */
+.competition-info-content.overflow {
+    animation-play-state: running;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff; /* Texte en blanc */
+    font-size: 14px;
+    font-weight: 500;
+    flex-shrink: 0; /* Empêche la compression des éléments */
+    min-width: fit-content; /* Assure que le texte ne soit pas coupé */
+}
+
+.info-item i {
+    color: #66b3ff; /* Icônes en bleu clair pour meilleur contraste sur fond foncé */
+    width: 16px;
+    font-size: 16px;
+}
+
+/* Styles spécifiques pour la page liste */
+.competition-info .competition-title {
+    font-size: 16px;
+    font-weight: bold;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+/* Ajustements responsive */
+@media (max-width: 768px) {
+    .competition-info .competition-title {
+        font-size: 14px;
+        order: -1;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+/* Responsive design pour les informations */
+@media (max-width: 768px) {
+    .competition-info {
+        padding: 10px;
+        top: auto; /* Annuler la position fixed sur mobile */
+        position: sticky; /* Utiliser sticky au lieu de fixed */
+        margin-top: 60px;
+    }
+    
+    .competition-info-content {
+        flex-wrap: nowrap;
+        gap: 10px;
+        padding: 8px 0;
+    }
+    
+    .info-item {
+        white-space: nowrap;
+        font-size: 12px;
+        flex-shrink: 0; /* Empêche la réduction des items */
+    }
+}
+
+/* Ajustements pour les écrans mobiles */
+@media (max-width: 768px) {
+    .toolbar {
+        height: auto;
+        min-height: 60px;
+    }
+
+    .competition-info {
+        position: fixed; /* Garde la position fixe */
+        top: 60px; /* Reste aligné sous la toolbar */
+    }
+
+    .competition-info-content {
+        flex-direction: row; /* Garde l'affichage horizontal */
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 4px 0;
+    }
+
+    .info-item {
+        white-space: nowrap; /* Empêche le retour à la ligne du texte */
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .content-wrapper {
+        margin-top: 130px; /* Ajusté pour tenir compte des deux barres fixes */
+        padding-top: 10px;
+    }
+}
+
+/* Ajustements spécifiques pour le mode paysage */
+@media (max-width: 768px) and (orientation: landscape) {
+    .content-wrapper {
+        padding-top: 120px; /* Ajusté pour le mode paysage */
+    }
+}
+
+/* Styles pour le bouton de rafraîchissement */
+.refresh-button {
+    position: static; /* Ne plus le fixer en bas de page */
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    height: 32px;
+    width: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-right: -1px; /* Pour éviter l'espacement entre le bouton et la barre de recherche */
+}
+
+.refresh-button:hover {
+    background-color: #c0392b;
+}
+
+.refresh-button i {
+    transition: transform 0.3s ease;
+}
+
+.refresh-button:hover i {
+    transform: rotate(180deg);
+}
+
+@keyframes spinning {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinning {
+    animation: spinning 1s linear infinite;
+}
+
+/* Conteneur flex pour la barre de recherche incluant le bouton de rafraîchissement */
+.search-controls {
+    display: flex;
+    align-items: center;
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Styles pour la barre de recherche */
+.search-bar-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--search-bar-background);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 6px;
+    transition: transform 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    height: 32px;
+}
+
+#competitor-search {
+    flex-grow: 1;
+    height: 32px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    padding: 0 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+#search-button {
+    height: 32px;
+    width: 40px;
+    border: none;
+    background-color: var(--search-button-color);
+    color: white;
+    border-radius: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.navigation-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.nav-button {
+    height: 32px;
+    width: 32px;
+    border: none;
+    background-color: var(--search-button-color);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.nav-button:first-child {
+    border-left: 1px solid rgba(255,255,255,0.2);
+}
+
+.nav-button:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.nav-button:hover, #search-button:hover {
+    background-color: var(--search-button-hover-color);
+}
+
+.nav-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+    background-color: var(--search-button-color);
+}
+
+#search-results {
+    color: var(--search-bar-text-color);
+    text-align: center;
+    font-size: 12px;
+    margin-top: 2px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-count {
+    font-style: italic;
+}
+
+/* Style pour les éléments en surbrillance */
+.competitor-highlight .highlight-text {
+    background-color: var(--search-highlight-background);
+    color: var(--search-highlight-color);
+    font-weight: bold;
+}
+
+/* Ajustements pour la compatiblité mobile */
+@media (max-width: 768px) {
+    .search-bar {
+        max-width: 100%;
+    }
+    
+    #competitor-search {
+        font-size: 14px;
+    }
+    
+    .search-bar-container {
+        padding: 4px;
+    }
+}
+
+/* Ajuster le contenu principal pour éviter qu'il ne soit caché par la barre de recherche */
+.content-wrapper {
+    padding-bottom: 54px; /* Ajustement pour la barre de recherche plus petite */
+}
+
+/* Adaptation pour les écrans en mode paysage sur mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+    .search-bar-container {
+        padding: 2px 4px;
+        height: auto;
+    }
+    
+    .search-bar {
+        max-width: 500px;
+        height: 28px;
+    }
+    
+    #competitor-search, #search-button, .nav-button {
+        height: 28px;
+    }
+    
+    #search-button, .nav-button {
+        width: 32px;
+    }
+    
+    #search-results {
+        margin-top: 0;
+        font-size: 10px;
+        height: 14px;
+    }
+    
+    /* Adapter le contenu pour laisser de la place pour la barre de recherche */
+    .content-wrapper {
+        padding-bottom: 46px;
+    }
+}
+
+/* Adaptation pour les très petits écrans */
+@media (max-width: 320px) {
+    .search-bar-container {
+        padding: 2px;
+    }
+    
+    #competitor-search {
+        padding: 0 6px;
+        font-size: 13px;
+    }
+    
+    #search-button, .nav-button {
+        width: 28px;
+    }
+}
+
+/* Ajustements spécifiques pour le mode portrait sur mobile */
+@media screen and (max-width: 420px) and (orientation: portrait) {
+    .content-wrapper {
+        margin-top: 100px; /* Augmenté pour laisser plus d'espace */
+        padding-top: 75px; /* Plus d'espace en haut */
+    }
+
+    /* Ajustement des listes */
+    table.listeTireur {
+        margin-top: 5px;
+    }
+
+    /* Ajustement du bandeau d'information */
+    .competition-info {
+        position: fixed;
+        top: 60px;
+        min-height: 90px; /* Hauteur minimale augmentée */
+        height: auto;
+        padding: 10px;
+    }
+
+    .competition-info-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .info-item {
+        width: 20%;
+        justify-content: flex-start;
+        padding: 2px 0;
+    }
+
+    /* Ajustement pour les tables de classement */
+    .fh, .fhtab, .fhpou {
+        height: calc(80vh - var(--fixed-head-height-margin)); /* Réduire la hauteur pour éviter le débordement */
+        margin-top: 20px; /* Ajouter de l'espace au-dessus des tableaux */
+    }
+
+    /* Ajuster la taille des cellules pour une meilleure lisibilité */
+    table.listeTireur td,
+    table.listeTireur th {
+        padding: 8px 4px;
+        font-size: 14px;
+    }
+
+    /* Assurer que le contenu défile correctement */
+    .content-wrapper {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Ajustements spécifiques pour le mode portrait sur mobile */
+@media screen and (max-width: 420px) and (orientation: portrait) {
+    .competition-info {
+        position: fixed;
+        top: 60px;
+        height: auto;
+        min-height: 40px;
+        padding: 2px 5px; /* Réduit le padding */
+    }
+
+    .competition-info-content {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 4px; /* Réduit l'espace entre les éléments */
+        padding: 2px 0; /* Réduit le padding vertical */
+        height: 100%;
+        width: auto;
+        white-space: nowrap;
+    }
+
+    .info-item {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        font-size: 12px;
+        padding: 2px;
+        margin-right: 4px; /* Réduit la marge entre les items */
+        white-space: nowrap;
+        gap: 4px; /* Réduit l'espace entre l'icône et le texte */
+    }
+
+    .info-item i {
+        font-size: 14px; /* Légèrement plus petit que la version desktop */
+        width: 14px;
+    }
+
+    .info-item:last-child {
+        margin-right: 4px;
+        padding-right: 4px;
+    }
+
+    /* Ajuster l'espacement du content pour éviter la superposition */
+    .content-wrapper {
+        margin-top: 190px; /* toolbar (60px) + info-banner (40px) + marge (10px) */
+        padding-top: 10px;
+    }
+}
+
+/* Styles pour les informations de la compétition */
+.competition-info {
+    position: fixed;
+    top: 60px; /* Colle directement sous la toolbar */
+    left: 0;
+    right: 0;
+    background: #032c55;
+    padding: 0 20px; /* Simplification du padding */
+    border-bottom: 2px solid #074f58;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    height: auto;
+    color: #fff;
+}
+
+.competition-info-content {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 15px;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 10px 0;
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+    animation: scrollText 20s linear infinite;
+    animation-play-state: paused; /* L'animation est en pause par défaut */
+}
+
+/* Animation de défilement */
+@keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 20px)); } /* -20px pour le gap */
+}
+
+/* Quand le contenu dépasse, active l'animation */
+.competition-info-content:hover {
+    animation-play-state: running;
+}
+
+/* Double le contenu quand il dépasse */
+.competition-info-content.overflow {
+    animation-play-state: running;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff; /* Texte en blanc */
+    font-size: 14px;
+    font-weight: 500;
+    flex-shrink: 0; /* Empêche la compression des éléments */
+    min-width: fit-content; /* Assure que le texte ne soit pas coupé */
+}
+
+.info-item i {
+    color: #66b3ff; /* Icônes en bleu clair pour meilleur contraste sur fond foncé */
+    width: 16px;
+    font-size: 16px;
+}
+
+/* Ajustements pour les écrans mobiles */
+@media (max-width: 768px) {
+    .competition-info {
+        position: fixed;
+        top: 60px;
+        padding: 0 10px;
+    }
+
+    .competition-info-content {
+        flex-wrap: nowrap;
+        gap: 10px;
+        padding: 8px 0;
+    }
+
+    .info-item {
+        white-space: nowrap;
+        font-size: 12px;
+        flex-shrink: 0; /* Empêche la réduction des items */
+    }
+}
+
+/* Ajustements spécifiques pour le mode portrait sur mobile */
+@media screen and (max-width: 420px) and (orientation: portrait) {
+    .competition-info {
+        position: fixed;
+        top: 60px; /* Coller au toolbar */
+        height: auto;
+        min-height: 40px;
+        padding: 5px 10px;
+    }
+
+    .competition-info-content {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 0;
+        height: 100%;
+        width: auto;
+        white-space: nowrap;
+    }
+
+    .info-item {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        font-size: 12px;
+        padding: 2px 5px;
+        margin-right: 10px;
+        white-space: nowrap;
+    }
+
+    .info-item:last-child {
+        margin-right: 0;
+        padding-right: 10px;
+    }
+
+    /* Ajuster l'espacement du content pour éviter la superposition */
+    .content-wrapper {
+        margin-top: 190px; /* toolbar (60px) + info-banner (40px) + marge (10px) */
+        padding-top: 10px;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .competition-info {
+        top: 45px; /* Utiliser la hauteur de toolbar réduite */
+    }
+    .content-wrapper {
+        margin-top: 60px; /* Ajuster pour la somme des hauteurs réduites */
+        padding-top: 2px;
+    }
+}
+
+/* Styles pour les informations de la compétition - version améliorée */
+.competition-info {
+    position: fixed;
+    top: 60px; /* Position standard sous la toolbar */
+    left: 0;
+    right: 0;
+    background: #032c55;
+    padding: 0 20px;
+    border-bottom: 2px solid #074f58;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    height: auto;
+    color: #fff;
+    transition: all 0.3s ease; /* Transition fluide pour les changements */
+}
+
+.competition-info-content {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 15px;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 10px 0;
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+    height: auto;
+    min-height: 40px; /* Hauteur minimale par défaut */
+}
+
+/* Optimisations spécifiques pour les écrans en mode paysage */
+@media (max-width: 896px) and (orientation: landscape) {
+    .toolbar {
+        height: auto;
+        max-height: 45px; /* Hauteur réduite en paysage */
+        padding: 1px 5px;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+    }
+    
+    .competition-info {
+        top: 45px; /* Suit exactement la hauteur de la toolbar */
+        padding: 0 4px;
+        min-height: 20px; /* Hauteur minimale réduite */
+    }
+    
+    .competition-info-content {
+        padding: 2px 0; /* Padding vertical minimal */
+        min-height: 20px; /* Hauteur minimale réduite */
+        height: auto;
+        gap: 3px;
+        font-size: 5px; /* Police plus petite */
+    }
+    
+    .info-item {
+        font-size: 11px; /* Police plus petite */
+        white-space: nowrap; /* Pas de retour à la ligne */
+        padding: 0 5px; /* Padding horizontal réduit */
+        gap: 5px; /* Espacement réduit entre icône et texte */
+        height: 22px; /* Hauteur fixe pour tous les items */
+        display: flex;
+        align-items: center;
+    }
+    
+    .info-item i {
+        font-size: 12px; /* Icônes plus petites */
+        width: 12px;
+    }
+    
+    .content-wrapper {
+        margin-top: 75px; /* Ajusté pour la somme des deux barres plus petites */
+        padding-top: 5px;
+    }
+}
+
+/* Très petits écrans en paysage (téléphones) */
+@media (max-width: 667px) and (orientation: landscape) {
+    .toolbar {
+        max-height: 40px;
+    }
+    
+    .competition-info {
+        top: 40px; /* Suit la hauteur de la toolbar */
+        min-height: 20px;
+    }
+    
+    .competition-info-content {
+        padding: 1px 0;
+        min-height: 20px;
+        font-size: 10px;
+        gap: 8px;
+    }
+    
+    .info-item {
+        font-size: 10px;
+        height: 18px;
+        gap: 4px;
+    }
+    
+    .content-wrapper {
+        margin-top: 65px; /* Total des deux barres */
+    }
+}
+
+/* Correction des styles pour la barre d'information - compatibilité Safari */
+.competition-info {
+    position: fixed;
+    top: 60px; /* Position standard sous la toolbar */
+    left: 0;
+    right: 0;
+    background: #032c55;
+    padding: 0;
+    border-bottom: 2px solid #074f58;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transform: translateZ(0); /* Force l'accélération matérielle */
+    -webkit-transform: translateZ(0); /* Pour Safari */
+    backface-visibility: hidden; /* Optimisation rendu */
+    -webkit-backface-visibility: hidden; /* Pour Safari */
+    height: 40px;
+}
+
+.competition-info-content {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 5px 10px;
+    margin: 0;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Ajustements spécifiques pour Safari sur iOS */
+@supports (-webkit-touch-callout: none) {
+    .toolbar {
+        height: 45px; /* Hauteur fixe pour Safari */
+        min-height: 45px;
+        padding: 0 10px;
+    }
+
+    .competition-info {
+        top: 45px; /* Coller à la toolbar */
+        height: 30px; /* Hauteur fixe */
+    }
+
+    .content-wrapper {
+        margin-top: 75px; /* 45px toolbar + 30px info */
+        padding-top: 0;
+    }
+}
+
+/* Optimisations pour le mode paysage */
+@media (max-width: 896px) and (orientation: landscape) {
+    @supports (-webkit-touch-callout: none) {
+        .toolbar {
+            height: 35px;
+            min-height: 35px;
+        }
+        
+        .competition-info {
+            top: 35px;
+            height: 25px;
+        }
+        
+        .competition-info-content {
+            height: 25px;
+            min-height: 25px;
+            padding: 2px 10px;
+        }
+        
+        .content-wrapper {
+            margin-top: 60px; /* 35px toolbar + 25px info */
+        }
+    }
+}
+
+/* Optimisations spécifiques pour les écrans en mode paysage */
+@media (max-width: 896px) and (orientation: landscape) {
+    .toolbar {
+        height: 35px;
+        min-height: 35px;
+        padding: 0 5px;
+    }
+    
+    .competition-info {
+        top: 35px; /* Colle exactement sous la toolbar */
+        height: 25px;
+        min-height: 25px;
+    }
+    
+    .competition-info-content {
+        padding: 0 5px;
+        height: 100%;
+        font-size: 11px;
+    }
+    
+    .info-item {
+        height: 25px;
+        padding: 0 5px;
+        gap: 4px;
+    }
+    
+    .info-item i {
+        font-size: 12px;
+    }
+    
+    .content-wrapper {
+        margin-top: 60px; /* 35px toolbar + 25px info */
+        padding-top: 5px;
+    }
+}
+
+/* Ajustements spécifiques pour Safari */
+@supports (-webkit-touch-callout: none) {
+    .toolbar {
+        position: fixed;
+        transform: translateZ(0);
+    }
+    
+    .competition-info {
+        transform: translateZ(0);
+        position: fixed;
+    }
+}
+
+/* Styles responsifs pour les petits écrans */
+@media screen and (max-width: 768px) {
+    .toolbar {
+        flex-wrap: wrap;
+        padding: 5px 10px;
+        gap: 5px;
+    }
+
+    .toolbar-button {
+        font-size: 0.8em;
+        padding: 5px 8px;
+        flex: 1 1 auto;
+        min-width: unset;
+        white-space: nowrap;
+    }
+
+    .competition-info {
+        padding: 5px 10px;
+    }
+
+    .competition-info-content {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .info-item {
+        font-size: 0.8em;
+        flex: 1 1 auto;
+        min-width: unset;
+        white-space: nowrap;
+        padding: 2px 5px;
+    }
+
+    .content-wrapper {
+        padding-top: 120px; /* Ajuster pour tenir compte de la hauteur de la barre d'outils en mode wrap */
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Ajustements pour les écrans très étroits */
+    @media screen and (max-width: 389px) {
+        .toolbar {
+            padding: 3px 5px;
+        }
+
+        .toolbar-button {
+            font-size: 0.7em;
+            padding: 3px 5px;
+        }
+
+        .info-item {
+            font-size: 0.7em;
+            padding: 2px 3px;
+        }
+
+        .competition-info-content {
+            justify-content: center;
+        }
+
+        /* Cacher certaines informations moins importantes sur les très petits écrans */
+        .info-item:not(.competition-title) {
+            display: none;
+        }
+
+        .content-wrapper {
+            padding-top: 80px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
+}
+
+/* Correction des styles pour la barre d'information et la toolbar */
+@media screen and (max-width: 667px) {
+    .toolbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 45px;
+        min-height: 45px;
+        padding: 2px 5px;
+        z-index: 1002;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+    }
+
+    .competition-info {
+        position: fixed !important; /* Force la position fixed */
+        top: 45px !important; /* Colle à la toolbar */
+        left: 0;
+        right: 0;
+        height: auto;
+        min-height: 35px;
+        padding: 2px 5px;
+        z-index: 1001;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+    }
+
+    .competition-info-content {
+        padding: 4px 5px;
+        min-height: 30px;
+        gap: 8px;
+        font-size: 12px;
+    }
+
+    .content-wrapper {
+        margin-top: 80px !important; /* 45px toolbar + 35px info */
+        padding-top: 5px;
+    }
+
+    /* Ajustement spécifique pour iPhone SE et similaires */
+    @media screen and (max-width: 375px) {
+        .toolbar {
+            height: 40px;
+            min-height: 40px;
+        }
+
+        .competition-info {
+            top: 40px !important;
+            min-height: 30px;
+        }
+
+        .content-wrapper {
+            margin-top: 50px !important; /* 40px toolbar + 30px info */
+        }
+    }
+}
+
+/* Optimisations spécifiques pour les petits écrans comme iPhone */
+@media screen and (max-width: 430px) {
+    .toolbar {
+        height: auto;
+        min-height: 40px;
+        padding: 3px 7px; /* Padding augmenté légèrement */
+        gap: 3px;
+        justify-content: space-evenly; /* Répartit l'espace uniformément */
+        flex-wrap: wrap;
+        z-index: 1002;
+        position: fixed !important;
+        width: 100%; /* Corrigé: assure 100% de largeur */
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+
+    .toolbar-button {
+        min-width: auto;
+        padding: 4px 6px;
+        font-size: 10px;
+        border-radius: 3px;
+        gap: 4px;
+        flex: 0 1 auto;
+        white-space: nowrap;
+        max-width: calc(33% - 6px); /* Limite à environ 3 boutons par ligne */
+    }
+}
+
+/* Optimisations spécifiques pour iPhone SE et très petits écrans */
+@media screen and (max-width: 375px) {
+    .toolbar {
+        min-height: 40px;
+        padding: 3px 4px; /* Padding augmenté légèrement */
+    }
+
+    .toolbar-button {
+        padding: 3px 4px;
+        font-size: 9px;
+        max-width: calc(33% - 4px); /* Ajusté pour les écrans très petits */
+    }
+}
+
+/* Optimisations pour les écrans ultra-étroits */
+@media screen and (max-width: 320px) {
+    .toolbar {
+        padding: 2px 3px; /* Padding augmenté légèrement */
+        gap: 2px;
+    }
+    
+    .toolbar-button {
+        padding: 2px 3px;
+        font-size: 8px;
+        border-radius: 2px;
+    }
+    
+    .toolbar-button i {
+        font-size: 10px;
+    }
+}
+
+/* Corrections pour Safari sur iOS */
+@supports (-webkit-touch-callout: none) {
+    .toolbar {
+        position: fixed !important;
+        width: 100% !important; /* Force 100% sur iOS Safari */
+        left: 0 !important;
+        right: 0 !important;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        will-change: transform;
+    }
+    
+    .content-wrapper {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* iPhone en orientation portrait */
+    @media screen and (max-width: 430px) and (orientation: portrait) {
+        .toolbar {
+            padding-top: env(safe-area-inset-top, 0);
+            padding-bottom: 2px;
+            height: auto;
+        }
+        
+        .competition-info {
+            top: calc(40px + env(safe-area-inset-top, 0)) !important;
+        }
+        
+        .content-wrapper {
+            margin-top: calc(75px + env(safe-area-inset-top, 0)) !important;
+        }
+    }
+}
+
+/* Styles pour les informations de la compétition - version optimisée */
+.competition-info {
+    position: fixed !important;
+    top: 60px; /* Se positionne directement sous la toolbar */
+    left: 0;
+    right: 0;
+    background: #032c55;
+    padding: 1px; /* Suppression du padding pour coller parfaitement */
+    margin: 2px; /* S'assurer qu'il n'y a pas de marge */
+    border-bottom: 1px solid #074f58; /* Bordure fine en bas seulement */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transform: translateZ(0); /* Force l'accélération matérielle */
+    -webkit-transform: translateZ(0); /* Pour Safari */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform; /* Optimisation performance */
+    height: 40px;
+}
+
+.competition-info-content {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 40px;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 1 10px; /* Padding horizontal uniquement */
+    margin: 6px;
+    height: 100%; /* Prend toute la hauteur du parent */
+    line-height: 40px; /* Centrage vertical du texte */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Media queries optimisées pour maintenir la relation toolbar/competition-info */
+
+/* Pour les écrans mobiles */
+@media screen and (max-width: 768px) {
+    .toolbar {
+        height: 50px;
+        min-height: 50px;
+        padding: 0 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .competition-info {
+        top: 50px !important; /* Coller directement sous la toolbar */
+        height: 35px;
+    }
+
+    .content-wrapper {
+        margin-top: 85px !important; /* 50px toolbar + 35px info */
+        padding-top: 10px;
+    }
+}
+
+/* Pour les écrans très petits */
+@media screen and (max-width: 430px) {
+    .toolbar {
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .competition-info {
+        top: 40px !important;
+        height: 30px;
+    }
+
+    .competition-info-content {
+        line-height: 30px;
+    }
+
+    .info-item {
+        font-size: 10px;
+    }
+
+    .content-wrapper {
+        margin-top: 70px !important; /* 40px toolbar + 30px info */
+    }
+}
+
+/* Pour les appareils en mode paysage */
+@media screen and (max-width: 896px) and (orientation: landscape) {
+    .toolbar {
+        height: 45px;
+        min-height: 55px;
+        padding: 0 5px;
+    }
+    
+    .competition-info {
+        top: 35px !important;
+        height: 25px;
+        min-height: 25px;
+    }
+    
+    .competition-info-content {
+        line-height: 25px;
+    }
+    
+    .content-wrapper {
+        margin-top: 60px !important; /* 35px toolbar + 25px info */
+    }
+}
+
+/* Support iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    .toolbar, .competition-info {
+        position: fixed !important;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    /* Gestion de la safe area pour les iPhone avec encoche */
+    @media screen and (orientation: portrait) {
+        .toolbar {
+            padding-top: max(0px, env(safe-area-inset-top));
+            height: calc(40px + env(safe-area-inset-top, 0px));
+        }
+        
+        .competition-info {
+            top: calc(40px + env(safe-area-inset-top, 0px)) !important;
+        }
+        
+        .content-wrapper {
+            margin-top: calc(70px + env(safe-area-inset-top, 0px)) !important;
+        }
+    }
+}
+
+/* Optimisations spécifiques pour les petits écrans comme iPhone */
+@media screen and (max-width: 430px) {
+    .toolbar {
+        height: auto;
+        min-height: 40px;
+        padding: 3px 7px; /* Padding augmenté légèrement */
+        gap: 3px;
+        justify-content: space-evenly; /* Répartit l'espace uniformément */
+        flex-wrap: wrap;
+        z-index: 1002;
+        position: fixed !important;
+        width: 100%; /* Corrigé: assure 100% de largeur */
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+
+    .toolbar-button {
+        min-width: auto;
+        padding: 4px 6px;
+        font-size: 10px;
+        border-radius: 3px;
+        gap: 4px;
+        flex: 0 1 auto;
+        white-space: nowrap;
+        max-width: calc(50% - 6px); /* Limite à environ 3 boutons par ligne */
+    }
+}
+
+/* Optimisations spécifiques pour iPhone SE et très petits écrans */
+@media screen and (max-width: 375px) {
+    .toolbar {
+        min-height: 40px;
+        padding: 3px 4px; /* Padding augmenté légèrement */
+    }
+
+    .toolbar-button {
+        padding: 3px 4px;
+        font-size: 9px;
+        max-width: calc(50% - 4px); /* Ajusté pour les écrans très petits */
+    }
+}
+
+/* Optimisations pour les écrans ultra-étroits */
+@media screen and (max-width: 320px) {
+    .toolbar {
+        padding: 2px 3px; /* Padding augmenté légèrement */
+        gap: 2px;
+    }
+    
+    .toolbar-button {
+        padding: 2px 3px;
+        font-size: 8px;
+        border-radius: 2px;
+    }
+    
+    .toolbar-button i {
+        font-size: 10px;
+    }
+}
+
+/* Corrections pour Safari sur iOS */
+@supports (-webkit-touch-callout: none) {
+    .toolbar {
+        position: fixed !important;
+        width: 100% !important; /* Force 100% sur iOS Safari */
+        left: 0 !important;
+        right: 0 !important;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        will-change: transform;
+    }
+}
