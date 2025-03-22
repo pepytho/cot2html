@@ -17,34 +17,35 @@ function endsWith( $str, $sub )
     return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
 
-function explorer($chemin)  /* IN USE */
-{
-    $lstat    = lstat($chemin);
-    $mtime    = date('d/m/Y H:i:s', $lstat['mtime']);
-    $filetype = filetype($chemin);
-
-    $competitionList = Array();
-
-    if( endswith( $chemin, ".cotcot" ) )
-	$competitionList[] = $chemin;
-
-    // Affichage des infos sur le fichier $chemin
-//    echo "$chemin   type: $filetype size: $lstat[size]  mtime: $mtime<br>\n";
-
-    // Si $chemin est un dossier => on appelle la fonction explorer() pour chaque élément (fichier ou dossier) du dossier$chemin
-    if( is_dir($chemin) )
-    {
-	$me = opendir($chemin);
-	while( $child = readdir($me) )
-	{
-	    if( $child != '.' && $child != '..' )
-	    {
-		$competitionList = array_merge( $competitionList, explorer( $chemin.DIRECTORY_SEPARATOR.$child ) );
-	    }
-	}
+function explorer($dir, $extension = '') {
+    $files = array();
+    
+    // Vérifier si le dossier existe
+    if (!is_dir($dir)) {
+        error_log("Dossier non trouvé: $dir");
+        return $files;
     }
 
-    return $competitionList;
+    try {
+        // Scan le dossier
+        $items = scandir($dir);
+        
+        foreach ($items as $item) {
+            if ($item != "." && $item != "..") {
+                $fullpath = $dir . DIRECTORY_SEPARATOR . $item;
+                
+                // Vérifier si c'est un fichier et si l'extension correspond
+                if (is_file($fullpath) && 
+                    (empty($extension) || strtolower(substr($item, -strlen($extension))) === strtolower($extension))) {
+                    $files[] = $fullpath;
+                }
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Erreur lors du scan du dossier $dir: " . $e->getMessage());
+    }
+
+    return $files;
 }
 
 function selectedCompetition()

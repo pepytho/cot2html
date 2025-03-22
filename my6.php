@@ -1752,7 +1752,12 @@ function renderMyTableau( $xml , $detail, $fold, $titre)
     
 
     
-    $tab  = "<div class='tblhd_top' onclick='mickey()'><span class='tbl_banner'>&#9776; $titre</span><br>";
+    // Récupérer la taille actuelle du tableau
+    $currentTabStart = isset($_GET['tabStart']) ? $_GET['tabStart'] : 256;
+
+    // Utiliser la nouvelle fonction pour créer l'en-tête avec le menu déroulant
+    $tab = createTableauHeader($titre, $currentTabStart);
+    
     $tab .= "<div class='tblhd_tab'><div></div>\n";
     $fixed_height = isset($_GET['scroll'])?'fhtab':'';
     $tab .= "<table id='scrollme' class='myTableau $fixed_height'><thead>";

@@ -627,3 +627,152 @@ tabSlider.noUiSlider.on('update', function( values, handle ) {
         location.replace(rebuildQuery(qry));
     }
 });
+
+// Remplacer tous les appels AJAX pour utiliser des URLs relatives
+$.ajax({
+    url: window.location.protocol + '//' + window.location.host + '/api/endpoint',
+    // ...
+});
+
+// Fonction de rafraîchissement de la page
+function refreshPage() {
+    const icon = document.querySelector('.refresh-button i');
+    icon.classList.add('spinning');
+    setTimeout(() => {
+        window.location.reload();
+    }, 500);
+}
+
+// Ajouter la détection de dépassement pour le bandeau d'information
+function checkContentOverflow() {
+    const container = document.querySelector('.competition-info');
+    const content = document.querySelector('.competition-info-content');
+    
+    if (content && container) {
+        // Vérifie si le contenu dépasse le conteneur
+        if (content.scrollWidth > container.clientWidth) {
+            // Clone et ajoute le contenu une deuxième fois pour un défilement continu
+            content.classList.add('overflow');
+            
+            // Duplique les éléments si ce n'est pas déjà fait
+            if (!content.querySelector('.duplicate-content')) {
+                const duplicate = document.createElement('div');
+                duplicate.className = 'duplicate-content';
+                duplicate.innerHTML = content.innerHTML;
+                content.appendChild(duplicate);
+            }
+        } else {
+            content.classList.remove('overflow');
+            // Retire les éléments dupliqués si présents
+            const duplicate = content.querySelector('.duplicate-content');
+            if (duplicate) {
+                duplicate.remove();
+            }
+        }
+    }
+}
+
+// Écouter le redimensionnement de la fenêtre
+window.addEventListener('resize', checkContentOverflow);
+// Vérifier au chargement de la page
+window.addEventListener('load', checkContentOverflow);
+
+// Mettre à jour les références à des SVG si elles existent
+// Par exemple, si vous avez des lignes comme:
+const svgElement = document.createElement('img');
+svgElement.src = 'icon.svg';
+// Remplacer par:
+const svgElement = document.createElement('img');
+svgElement.src = 'svg/icon.svg';
+
+/**
+ * Change la taille du tableau affiché et met à jour l'URL
+ * @param {string} size - La taille du tableau à afficher (512, 256, 128, 64, etc.)
+ */
+function changeTableauSize(size) {
+    console.log("Changing tableau size to: " + size); // Debug
+    
+    // Récupérer tous les paramètres actuels
+    var qry = parseQuery(location.search);
+    
+    // Mettre à jour tabStart avec la nouvelle taille
+    qry["tabStart"] = size;
+    
+    // S'assurer que tous les paramètres essentiels sont présents
+    if (!qry["file"]) {
+        console.error("Missing file parameter");
+        return false;
+    }
+    
+    qry["item"] = "tab"; // S'assurer que nous restons sur la page du tableau
+    
+    // Conserver les autres paramètres s'ils existent
+    if (!qry["tabEnd"]) qry["tabEnd"] = "2";
+    if (!qry["zoom"]) qry["zoom"] = getZoom();
+    if (!qry["scroll"]) qry["scroll"] = "0";
+    
+    // Construire la nouvelle URL
+    var newURL = rebuildQuery(qry);
+    console.log("Redirecting to: " + newURL); // Debug
+    
+    // Forcer le rechargement de la page
+    window.top.location.href = newURL;
+    
+    return false; // Empêcher la soumission du formulaire si appelé depuis un onsubmit
+}
+
+/**
+ * Change la taille du tableau affiché et met à jour l'URL
+ * @param {string} size - La taille du tableau à afficher (512, 256, 128, 64, etc.)
+ */
+function changeTableauSize(size) {
+    console.log("Changing tableau size to: " + size);
+    
+    // On récupère les paramètres de l'URL actuelle
+    var qry = parseQuery(location.search);
+    
+    // On préserve le nom du fichier exactement comme il est dans l'URL actuelle
+    var fileParam = location.search.match(/[?&]file=([^&]+)/);
+    var fileValue = fileParam ? fileParam[1] : null;
+    
+    // Si on a trouvé le paramètre file, on le préserve exactement tel quel
+    if (fileValue) {
+        // Utiliser le fileValue original sans re-encoder/décoder pour préserver son format exact
+        qry["file"] = fileValue;
+    }
+    
+    // Mise à jour de tabStart
+    qry["tabStart"] = size;
+    
+    // S'assurer que tous les autres paramètres nécessaires sont présents
+    if (!qry["item"]) qry["item"] = "tab";
+    if (!qry["tabEnd"]) qry["tabEnd"] = "2";
+    if (!qry["zoom"]) qry["zoom"] = getZoom();
+    if (!qry["scroll"]) qry["scroll"] = "0";
+    if (!qry["tableau"]) qry["tableau"] = "0";
+    
+    // Construire la nouvelle URL en préservant l'encodage original du fichier
+    var newURL = location.origin + location.pathname + "?";
+    var sep = "";
+    
+    // Commencer par le paramètre file pour préserver son encodage exact
+    if (fileValue) {
+        newURL += "file=" + fileValue;
+        sep = "&";
+    }
+    
+    // Ajouter tous les autres paramètres
+    for (var key in qry) {
+        if (key !== "file") { // On a déjà ajouté le file
+            newURL += sep + key + "=" + qry[key];
+            sep = "&";
+        }
+    }
+    
+    console.log("Redirecting to: " + newURL);
+    
+    // Rediriger vers la nouvelle URL
+    window.location.href = newURL;
+    
+    return false;
+}
