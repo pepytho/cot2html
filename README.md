@@ -1,5 +1,23 @@
 # cot2html
+Ce projet, nommé `cot2html`, est conçu pour convertir des fichiers de compétition d'escrime au format `.cotcot` en pages HTML. 
+Sur Le logiciel BellePoule vous pouvez ajouter l'adresse FTP du dossier "cotcot" de votre serveur web dans l'onglet "Publication". 
+Il mettra automatiquement en ligne sur votre site Web les résultats rentré sur le logiciel Bellpoule
 
+Prerequisites: PHP 7.0 or higher, a web server with SSL support, and `.cotcot` files in the `cotcot` directory.
+
+description succincte de ses fonctionnalités :
+
+* **Conversion de fichiers de compétition** : Le projet permet de convertir des fichiers `.cotcot` en pages HTML, facilitant ainsi la visualisation des résultats de compétitions d'escrime sur votre site internet.
+* **Affichage des résultats** : Les utilisateurs peuvent voir les résultats des compétitions sous forme de tableaux, de classements et de listes de participants.
+* **Navigation intuitive** : Le projet propose une interface utilisateur avec des onglets et des menus déroulants pour naviguer facilement entre les différentes sections (poules, tableaux, classements).
+* **Support des drapeaux** : Les drapeaux des pays des participants sont affichés à côté de leurs noms, améliorant ainsi la lisibilité et l'identification des tireurs.
+* **Compatibilité mobile** : L'interface est responsive, ce qui signifie qu'elle s'adapte aux différentes tailles d'écran, y compris les appareils mobiles android et IOS.
+
+Pour plus de détails, vous pouvez consulter les fichiers suivants :
+* `functions.php` : Contient les fonctions principales pour la gestion des compétitions.
+* `my6.php` : Gère l'affichage des tableaux et des classements.
+* `selcot.php` : Permet la sélection des fichiers `.cotcot` à convertir.
+* `selcotpage.php` : Génère la page de sélection des compétitions.
 
 
 A propos des champs de l'URL
